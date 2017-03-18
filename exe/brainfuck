@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby -w
+require 'brainfuck'
+
+require "optparse"
+
+options = {}
+
+option_parser = OptionParser.new do |o|
+  o.banner = "Usage: #{File.basename(__FILE__)} [options] file"
+  o.on("-v", "--version", "Display version information") { puts Brainfuck::VERSION; exit }
+  o.on("-h", "--help", "Display this message") { puts o; exit }
+  o.on("-s", "--source=SOURCE", String, "Brain fuck source code") { |s| options[:source] = s }
+end
+option_parser.parse!
+
+interpreter = Brainfuck.interpreter(source: options[:source]) if options[:source]
+interpreter ||= Brainfuck.interpreter(file: ARGV.first) unless ARGV.empty?
+
+if interpreter.nil?
+  STDERR.puts("Missing filename.")
+  exit(1)
+end
+
+clean_run = begin
+  interpreter.run
+rescue Exception =>e
+  puts "Error: #{e.message}"
+  exit 1
+end
+
+exit(clean_run == true ? 0 : 1)
