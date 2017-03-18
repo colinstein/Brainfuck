@@ -1,0 +1,19 @@
+---
+machine:
+  timezone: "UTC"
+
+  environment:
+    LOG_LEVEL: "DEBUG"
+    CI: true
+
+  ruby:
+    version: "2.4.0"
+
+dependencies:
+  pre:
+    - "gem install bundler -v 1.14.6"
+    - "bundle install"
+
+test:
+  post:
+    - "bundle exec rake spec"
