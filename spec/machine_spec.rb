@@ -15,7 +15,7 @@ describe Brainfuck::Machine do
   describe "#run" do
     it "runs a valid program" do
       allow(program).to receive(:valid?) { true }
-      allow(program).to receive(:[]).and_return(?+, nil)
+      allow(program).to receive(:instruction).with(0).and_return(?+, nil)
       allow(program).to receive(:size).and_return(1)
       allow(memory).to receive(:minimum_value).and_return(0)
       allow(memory).to receive(:maximum_value).and_return(10)
@@ -37,7 +37,7 @@ describe Brainfuck::Machine do
     describe "#fetch" do
       let(:instruction) { ?+ }
       it "fetches an instruction" do
-        allow(program).to receive(:[]).with(0).and_return(instruction)
+        allow(program).to receive(:instruction).with(0).and_return(instruction)
         expect(subject.send(:fetch)).to eq(instruction)
       end
     end

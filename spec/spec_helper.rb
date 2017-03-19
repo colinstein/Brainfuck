@@ -25,7 +25,7 @@ RSpec.configure do |config|
 
   def mock_program_string(program, instructions)
     instructions.chars.each.with_index do |instruction, index|
-      allow(program).to receive(:[]).with(index).and_return(instruction)
+      allow(program).to receive(:instruction).with(index).and_return(instruction)
     end
   end
 
