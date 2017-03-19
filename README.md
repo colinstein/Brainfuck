@@ -1,6 +1,4 @@
-# BrainFuck Interpreter
-[![CircleCI](https://circleci.com/gh/colinstein/Brainfuck/tree/master.svg?style=shield)](https://circleci.com/gh/colinstein/Brainfuck/tree/master)
-[![codecov](https://codecov.io/gh/colinstein/Brainfuck/branch/master/graph/badge.svg)](https://codecov.io/gh/colinstein/Brainfuck)
+# BrainFuck Interpreter [![CircleCI](https://circleci.com/gh/colinstein/Brainfuck/tree/master.svg?style=shield)](https://circleci.com/gh/colinstein/Brainfuck/tree/master) [![codecov](https://codecov.io/gh/colinstein/Brainfuck/branch/master/graph/badge.svg)](https://codecov.io/gh/colinstein/Brainfuck)
 BrainFuck is an esoteric programming language, this is a Ruby interpreter for
 that language.
 
