@@ -30,7 +30,7 @@ out are passed to the interpreter.
   3. Add the following code:
   ```ruby
   require "brainfuck"
-  bfi = Brainfuck::Interpreter.new file: "somefile.bf"
+  bfi = Brainfuck::Interpreter.new(file: "somefile.bf")
   bfi.run
   ```
 In this example `somefile.bf` would be a file containing a valid BrainFuck
@@ -38,7 +38,7 @@ program. Alternatively, you can interpret seom arbitrary string of Brainfuck
 code by doing the following:
 ```ruby
 require "brainfuck"
-bfi = Brainfuck::Interpreter.new source: "somefile.bf"
+bfi = Brainfuck::Interpreter.new(source: "++++++++++.....")
 bfi.run
 ```
 You may want to explore `Brainfuck::Machine.new` class to manually build an
