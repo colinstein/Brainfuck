@@ -10,9 +10,9 @@ module Brainfuck
 
     attr_reader :source
 
-    def_delegators :instructions, :size, :[]
+    def_delegators :instructions, :size
 
-    check_bounds :[], proc: ->(i) { (0..size).include? i }
+    check_bounds :instruction, proc: ->(i) { (0..size).include? i }
 
     def self.from_file(filename)
       source = File.read(filename)
@@ -29,9 +29,8 @@ module Brainfuck
       @source = source.to_s
     end
 
-    # we want some better bounds checking here
     def instruction(index)
-      parsed_source.fetch(index)
+      instructions.fetch(index)
     end
 
     def valid?

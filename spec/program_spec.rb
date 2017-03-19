@@ -120,20 +120,20 @@ describe Brainfuck::Program do
     end
   end
 
-  describe "#[]" do
-    it "has a [] method" do
-      expect(subject).to respond_to(:[]).with(1).argument
+  describe "#instruction" do
+    it "has a instruction method" do
+      expect(subject).to respond_to(:instruction).with(1).argument
     end
     it "returns an instruction" do
-      expect(subject[0]).to eq("+")
-      expect(subject[1]).to eq("-")
-      expect(subject[2]).to eq("+")
+      expect(subject.instruction(0)).to eq("+")
+      expect(subject.instruction(1)).to eq("-")
+      expect(subject.instruction(2)).to eq("+")
     end
     it "raises an exception if index too small" do
-      expect{ subject[-1] }.to raise_exception(ArgumentError)
+      expect{ subject.instruction(-1) }.to raise_exception(ArgumentError)
     end
     it "raises an exception if index too big" do
-      expect{ subject[instructions.length + 1] }.to raise_exception(ArgumentError)
+      expect{ subject.instruction(instructions.length + 1) }.to raise_exception(ArgumentError)
     end
   end
 
