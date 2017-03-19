@@ -21,11 +21,4 @@ if interpreter.nil?
   exit(1)
 end
 
-clean_run = begin
-  interpreter.run
-rescue Exception =>e
-  puts "Error: #{e.message}"
-  exit 1
-end
-
-exit(clean_run == true ? 0 : 1)
+interpreter.run

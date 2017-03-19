@@ -112,27 +112,26 @@ module Brainfuck
 
     def jump_forward_on_zero_at_data_pointer
       return unless memory[data_pointer].zero?
-      jump_markers_seen = 1
-      until jump_markers_seen.zero? do
+      jump_forward_markers_seen = 1
+      until jump_forward_markers_seen.zero? do
         increment_instruction_pointer
         case fetch
-          when ?[; jump_markers_seen += 1
-          when ?]; jump_markers_seen -= 1
+          when ?[; jump_forward_markers_seen += 1
+          when ?]; jump_forward_markers_seen -= 1
         end
       end
     end
 
     def jump_backward_on_non_zero_at_data_pointer
       return if memory[data_pointer].zero?
-      jump_markers_seen = 1
-      until jump_markers_seen.zero? do
+      jump_backward_markers_seen = 1
+      until jump_backward_markers_seen.zero? do
         decrement_instruction_pointer
         case fetch
-          when ?[; jump_markers_seen -= 1
-          when ?]; jump_markers_seen += 1
+          when ?[; jump_backward_markers_seen -= 1
+          when ?]; jump_backward_markers_seen += 1
         end
       end
-
     end
 
   end
