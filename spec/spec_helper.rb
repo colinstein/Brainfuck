@@ -23,10 +23,10 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 
-  def mock_program_string(program, instructions)
-    instructions.chars.each.with_index do |instruction, index|
-      allow(program).to receive(:instruction).with(index).and_return(instruction)
-    end
-  end
+end
 
+def mock_program_string(program, instructions)
+  instructions.chars.each.with_index do |instruction, index|
+    allow(program).to receive(:instruction).with(index).and_return(instruction)
+  end
 end
