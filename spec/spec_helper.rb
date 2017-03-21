@@ -25,6 +25,10 @@ RSpec.configure do |config|
 
 end
 
+def integration_source(program)
+  "#{File.dirname(__FILE__)}/integration/src/#{program}"
+end
+
 def mock_program_string(program, instructions)
   instructions.chars.each.with_index do |instruction, index|
     allow(program).to receive(:instruction).with(index).and_return(instruction)

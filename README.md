@@ -55,11 +55,34 @@ git commits and tags, and push the `.gem` file to
 
 ### Running Tests
   1. `bundle install`
-  2. `rake spec`
+  2. `rspec`
+
+#### Integration Tests
+Integration tests consist of loading the full source of applications from a file
+on disk, running them, and ensuring that the output is as expected (appropriate
+values in memory, written to stdout or read from stdin).
+
+**Integration tests are run by default** however you may run them explicitly and
+in isolation with:
+```
+rspec --tag integration
+```
+
+The integration tests consist of example programs gathered from around the web
+but they appear to be under a Creative Commons license:
+
+  * [primes_count.bf](http://esoteric.sange.fi/brainfuck/bf-source/prog/)
+  * [add_values.bf, hello_world.bf, and math_to_seven.bf](https://en.wikipedia.org/wiki/Brainfuck)
+
+Alternatively, you can run the specs with the command line interpeter:
+```
+brainfuck spec/integration/src/primes_count.bf
+```
 
 ### Contributing
-Bug reports and pull requests are welcome on GitHub at
-https://github.com/colinstein/brainfuck.
+Bug reports and pull requests are welcome on
+[GitHub](https://github.com/colinstein/brainfuck).
+
 
 ## About BrainFuck
 [The BrainFuck description](http://www.muppetlabs.com/~breadbox/bf/) comes from

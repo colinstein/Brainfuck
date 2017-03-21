@@ -75,7 +75,7 @@ module Brainfuck
     end
 
     def decrement_data_pointer
-      if (1...data_pointer).include?(data_pointer - 1)
+      if (0...data_pointer).include?(data_pointer - 1)
         @data_pointer -= 1
       else
         @data_pointer = (memory.size - 1)
