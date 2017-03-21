@@ -63,6 +63,20 @@ describe Brainfuck::Machine do
       end
     end
 
+    describe "#increment_instruction_pointer" do
+      subject { machine.send(:dispatch, :increment_instruction_pointer) }
+      it "increments the instruction pointer" do
+        expect{ subject }.to change(machine, :instruction_pointer).by(1)
+      end
+    end
+
+    describe "#decrement_instruction_pointer" do
+      subject { machine.send(:dispatch, :decrement_instruction_pointer) }
+      it "decrements the instruction pointer" do
+        expect{ subject }.to change(machine, :instruction_pointer).by(-1)
+      end
+    end
+
     describe "instruction implimentations" do
       describe "#increment_data_pointer '>'" do
         subject { machine.send(:dispatch, :increment_data_pointer) }
@@ -70,6 +84,11 @@ describe Brainfuck::Machine do
           allow(memory).to receive(:size).and_return(10)
           machine.instance_variable_set(:@data_pointer, 5)
           expect{ subject }.to change(machine, :data_pointer).by(1)
+        end
+        it "increments the data pointer to the maximum value" do
+          machine.instance_variable_set(:@data_pointer, 8)
+          allow(memory).to receive(:size).and_return(10)
+          expect{ subject }.to change(machine, :data_pointer).to(9)
         end
         context "at the end of the memory" do
           it "wraps to the begining" do
@@ -86,6 +105,11 @@ describe Brainfuck::Machine do
           machine.instance_variable_set(:@data_pointer, 5)
           allow(memory).to receive(:size).and_return(10)
           expect{ subject }.to change(machine, :data_pointer).by(-1)
+        end
+        it "decrements the data pointer to the minimum value" do
+          machine.instance_variable_set(:@data_pointer, 1)
+          allow(memory).to receive(:size).and_return(10)
+          expect{ subject }.to change(machine, :data_pointer).to(0)
         end
         context "at the start of the memory" do
           it "wraps to the end" do
