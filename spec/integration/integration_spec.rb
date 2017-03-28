@@ -33,7 +33,7 @@ describe Brainfuck, integration: true do
     let(:program) { integration_source "math_to_seven.bf" }
     it "calculates the correct value and outputs a single byte" do
       expect(STDOUT).to receive(:write).with(?7).and_return(1)
-      expect{ subject }.to change{interpreter.memory[0]}.to(?7.ord)
+      expect{ subject }.to change{interpreter.memory.read(0)}.to(?7.ord)
     end
   end
 

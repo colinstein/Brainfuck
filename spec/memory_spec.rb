@@ -75,45 +75,45 @@ describe Brainfuck::Memory do
     end
   end
 
-  describe "#[]" do
-    it "responds to []" do
-      expect(subject).to respond_to(:[])
+  describe "#read" do
+    it "responds to #read" do
+      expect(subject).to respond_to(:read).with(1).argument
     end
     context "with index in range" do
       let(:index) { 1 }
       it "returns the value" do
-        expect(subject[index]).to eq(default)
+        expect(subject.read(index)).to eq(default)
       end
     end
     context "with index out of range" do
       let(:small_index) { -1 }
       let(:big_index) { size.next }
       it "raises an exception" do
-        expect{ subject[big_index] }.to raise_exception(ArgumentError)
-        expect{ subject[small_index] }.to raise_exception(ArgumentError)
+        expect{ subject.read(big_index) }.to raise_exception(ArgumentError)
+        expect{ subject.read(small_index) }.to raise_exception(ArgumentError)
       end
     end
   end
 
-  describe "#[]=" do
-    it "responds to []=" do
-      expect(subject).to respond_to(:[]=)
+  describe "#write" do
+    it "responds to #write" do
+      expect(subject).to respond_to(:write).with(2).arguments
     end
     context "with index in range" do
       let(:index) { 0 }
       context "with value in range" do
         it "sets the value" do
-          expect(subject[index] = default).to eq(default)
-          expect(subject[index] = minimum).to eq(minimum)
-          expect(subject[index] = maximum).to eq(maximum)
+          expect(subject.write(index, default)).to eq(default)
+          expect(subject.write(index, minimum)).to eq(minimum)
+          expect(subject.write(index, maximum)).to eq(maximum)
         end
       end
       context "with value out of range" do
         let(:small_value) { minimum - 1 }
         let(:big_value) { maximum.next }
         it "sets the value" do
-            expect{ subject[index] = small_value }.to raise_exception{ArgumentError}
-            expect{ subject[index] = big_value }.to raise_exception{ArgumentError}
+            expect{ subject.write(index, small_value) }.to raise_exception{ArgumentError}
+            expect{ subject.write(index, big_value) }.to raise_exception{ArgumentError}
         end
       end
     end
@@ -121,8 +121,8 @@ describe Brainfuck::Memory do
       let(:small_index) { -1 }
       let(:big_index) { size.next }
       it "raises an exception" do
-        expect{ subject[big_index] = default }.to raise_exception(ArgumentError)
-        expect{ subject[small_index] = default }.to raise_exception(ArgumentError)
+        expect{ subject.write(big_index, default) }.to raise_exception(ArgumentError)
+        expect{ subject.write(small_index, default) }.to raise_exception(ArgumentError)
       end
     end
   end

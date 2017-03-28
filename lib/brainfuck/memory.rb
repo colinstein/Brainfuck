@@ -12,9 +12,9 @@ module Brainfuck
 
     def_delegator :@value_range, :min, :minimum_value
     def_delegator :@value_range, :max, :maximum_value
-    def_delegators :@cells, :size, :[]
+    def_delegator :@cells, :size
 
-    check_bounds :[], :[]=, proc: ->(i) { (0..size).include? i }
+    check_bounds :read, :write, proc: ->(i) { (0..size).include? i }
 
     def initialize(size: DEFAULT_SIZE, minimum: MIN_VALUE, maximum: MAX_VALUE, default: MIN_VALUE)
       size, min, max, default = [size, minimum, maximum, default].map(&:to_i)
@@ -25,7 +25,11 @@ module Brainfuck
       @cells = Array.new(size, default)
     end
 
-    def []=(index, value)
+    def read(index)
+      @cells.fetch(index)
+    end
+
+    def write(index, value)
       raise ArgumentError.new("Invalid value for cell") unless @value_range.include?(value)
       @cells[index] = value
     end

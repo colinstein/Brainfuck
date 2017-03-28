@@ -19,8 +19,8 @@ describe Brainfuck::Machine do
       allow(program).to receive(:size).and_return(1)
       allow(memory).to receive(:minimum_value).and_return(0)
       allow(memory).to receive(:maximum_value).and_return(10)
-      allow(memory).to receive(:[]).with(0).and_return(0)
-      allow(memory).to receive(:[]=).with(0, 1).and_return(1)
+      allow(memory).to receive(:read).with(0).and_return(0)
+      allow(memory).to receive(:write).with(0, 1).and_return(1)
       expect(subject.run).to eq(true)
     end
     context "with an invalid program" do
@@ -126,8 +126,8 @@ describe Brainfuck::Machine do
           machine.instance_variable_set(:@data_pointer, 0)
           allow(memory).to receive(:minimum_value).and_return(0)
           allow(memory).to receive(:maximum_value).and_return(10)
-          allow(memory).to receive(:[]).with(0).and_return(5)
-          expect(memory).to receive(:[]=).with(0, 6).and_return(6)
+          allow(memory).to receive(:read).with(0).and_return(5)
+          expect(memory).to receive(:write).with(0, 6).and_return(6)
           expect(subject).to eq(6)
         end
         context "when the value is at the maximimum" do
@@ -135,8 +135,8 @@ describe Brainfuck::Machine do
             machine.instance_variable_set(:@data_pointer, 0)
             allow(memory).to receive(:minimum_value).and_return(0)
             allow(memory).to receive(:maximum_value).and_return(10)
-            allow(memory).to receive(:[]).with(0).and_return(10)
-            expect(memory).to receive(:[]=).with(0, 0).and_return(0)
+            allow(memory).to receive(:read).with(0).and_return(10)
+            expect(memory).to receive(:write).with(0, 0).and_return(0)
             expect(subject).to eq(0)
           end
         end
@@ -148,16 +148,16 @@ describe Brainfuck::Machine do
           machine.instance_variable_set(:@data_pointer, 0)
           allow(memory).to receive(:minimum_value).and_return(0)
           allow(memory).to receive(:maximum_value).and_return(10)
-          allow(memory).to receive(:[]).with(0).and_return(5)
-          expect(memory).to receive(:[]=).with(0, 4).and_return(4)
+          allow(memory).to receive(:read).with(0).and_return(5)
+          expect(memory).to receive(:write).with(0, 4).and_return(4)
           expect(subject).to eq(4)
         end
         context "when the value is at the minimum" do
           it "wraps to the maximum" do
             allow(memory).to receive(:minimum_value).and_return(0)
             allow(memory).to receive(:maximum_value).and_return(10)
-            allow(memory).to receive(:[]).with(0).and_return(0)
-            expect(memory).to receive(:[]=).with(0, 10).and_return(10)
+            allow(memory).to receive(:read).with(0).and_return(0)
+            expect(memory).to receive(:write).with(0, 10).and_return(10)
             expect(subject).to eq(10)
           end
         end
@@ -166,7 +166,7 @@ describe Brainfuck::Machine do
       describe "#write_byte_from_data_pointer_cell_to_stdout '.'" do
         subject { machine.send(:dispatch, :write_byte_from_data_pointer_cell_to_stdout) }
         it "writes a byte" do
-          allow(memory).to receive(:[]).with(0).and_return(120)
+          allow(memory).to receive(:read).with(0).and_return(120)
           expect(output).to receive(:write).with(120).and_return(1)
           expect(subject).to eq(1)
         end
@@ -179,7 +179,7 @@ describe Brainfuck::Machine do
           allow(memory).to receive(:minimum_value).and_return(0)
           allow(memory).to receive(:maximum_value).and_return(255)
           allow(input).to receive(:read).and_return(120)
-          expect(memory).to receive(:[]=).with(0, 120).and_return(120)
+          expect(memory).to receive(:write).with(0, 120).and_return(120)
           expect(subject).to eq(120)
         end
         context "when the value read is not in the value range" do
@@ -188,7 +188,7 @@ describe Brainfuck::Machine do
             allow(memory).to receive(:minimum_value).and_return(10)
             allow(memory).to receive(:maximum_value).and_return(100)
             allow(input).to receive(:read).and_return( 1, 200, 50)
-            expect(memory).to receive(:[]=).with(0, 50.ord).and_return(50)
+            expect(memory).to receive(:write).with(0, 50.ord).and_return(50)
             expect(subject).to eq(50)
           end
         end
@@ -199,14 +199,14 @@ describe Brainfuck::Machine do
         it "jumps forward to the next ']' instruction" do
           machine.instance_variable_set(:@data_pointer, 0)
           machine.instance_variable_set(:@instruction_pointer, 0)
-          allow(memory).to receive(:[]).with(0).and_return(0)
+          allow(memory).to receive(:read).with(0).and_return(0)
           mock_program_string(program, "[+]")
           expect{ subject }.to change(machine, :instruction_pointer).by(2)
         end
         it "jumps forward to the next *matching* ']' instruction" do
           machine.instance_variable_set(:@data_pointer, 0)
           machine.instance_variable_set(:@instruction_pointer, 0)
-          allow(memory).to receive(:[]).with(0).and_return(0)
+          allow(memory).to receive(:read).with(0).and_return(0)
           mock_program_string(program, "[+[[++]--][>><<]--++]>>++")
           expect{ subject }.to change(machine, :instruction_pointer).by(20)
         end
@@ -214,7 +214,7 @@ describe Brainfuck::Machine do
           it "doesn't jump" do
             machine.instance_variable_set(:@data_pointer, 0)
             machine.instance_variable_set(:@instruction_pointer, 0)
-            allow(memory).to receive(:[]).with(0).and_return(1)
+            allow(memory).to receive(:read).with(0).and_return(1)
             expect{ subject }.not_to change(machine, :instruction_pointer)
           end
         end
@@ -225,14 +225,14 @@ describe Brainfuck::Machine do
         it "jumps backward to the last '['" do
           machine.instance_variable_set(:@data_pointer, 0)
           machine.instance_variable_set(:@instruction_pointer, 2)
-          allow(memory).to receive(:[]).with(0).and_return(1)
+          allow(memory).to receive(:read).with(0).and_return(1)
           mock_program_string(program, "[+]")
           expect{ subject }.to change(machine, :instruction_pointer).by(-2)
         end
         it "jumps backward to the last *matching* '[' instruction" do
           machine.instance_variable_set(:@data_pointer, 1)
           machine.instance_variable_set(:@instruction_pointer, 20)
-          allow(memory).to receive(:[]).with(1).and_return(1)
+          allow(memory).to receive(:read).with(1).and_return(1)
           mock_program_string(program, "[+[[++]--][>><<]--++]>>++")
           expect{ subject }.to change(machine, :instruction_pointer).by(-20)
         end
@@ -240,7 +240,7 @@ describe Brainfuck::Machine do
           it "doesn't jump" do
             machine.instance_variable_set(:@data_pointer, 0)
             machine.instance_variable_set(:@instruction_pointer, 1)
-            allow(memory).to receive(:[]).with(0).and_return(0)
+            allow(memory).to receive(:read).with(0).and_return(0)
             expect{ subject }.not_to change(machine, :instruction_pointer)
           end
         end

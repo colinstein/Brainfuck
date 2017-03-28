@@ -83,18 +83,20 @@ module Brainfuck
     end
 
     def increment_data_at_data_pointer
-      if (memory.minimum_value...memory.maximum_value).include?(memory[data_pointer])
-        memory[data_pointer] += 1
+      if (memory.minimum_value...memory.maximum_value).include?(memory.read(data_pointer))
+        new_value = memory.read(data_pointer) + 1
+        memory.write(data_pointer,new_value)
       else
-        memory[data_pointer] = memory.minimum_value
+        memory.write(data_pointer, memory.minimum_value)
       end
     end
 
     def decrement_data_at_data_pointer
-      if (memory.minimum_value.next...memory.maximum_value).include?(memory[data_pointer])
-        memory[data_pointer] -= 1
+      if (memory.minimum_value.next...memory.maximum_value).include?(memory.read(data_pointer))
+        new_value = memory.read(data_pointer) - 1
+        memory.write(data_pointer, new_value)
       else
-        memory[data_pointer] = memory.maximum_value
+        memory.write(data_pointer, memory.maximum_value)
       end
     end
 
@@ -103,15 +105,15 @@ module Brainfuck
       until (memory.minimum_value..memory.maximum_value).include?(value)
         value = @input.read
       end
-      memory[data_pointer] = value
+      memory.write(data_pointer, value)
     end
 
     def write_byte_from_data_pointer_cell_to_stdout
-      @output.write(memory[data_pointer])
+      @output.write(memory.read(data_pointer))
     end
 
     def jump_forward_on_zero_at_data_pointer
-      return unless memory[data_pointer].zero?
+      return unless memory.read(data_pointer).zero?
       jump_forward_markers_seen = 1
       until jump_forward_markers_seen.zero? do
         increment_instruction_pointer
@@ -123,7 +125,7 @@ module Brainfuck
     end
 
     def jump_backward_on_non_zero_at_data_pointer
-      return if memory[data_pointer].zero?
+      return if memory.read(data_pointer).zero?
       jump_backward_markers_seen = 1
       until jump_backward_markers_seen.zero? do
         decrement_instruction_pointer
