@@ -120,20 +120,20 @@ describe Brainfuck::Program do
     end
   end
 
-  describe "#instruction" do
-    it "has a instruction method" do
-      expect(subject).to respond_to(:instruction).with(1).argument
+  describe "#read" do
+    it "has a read method" do
+      expect(subject).to respond_to(:read).with(1).argument
     end
-    it "returns an instruction" do
-      expect(subject.instruction(0)).to eq("+")
-      expect(subject.instruction(1)).to eq("-")
-      expect(subject.instruction(2)).to eq("+")
+    it "returns an read" do
+      expect(subject.read(0)).to eq("+")
+      expect(subject.read(1)).to eq("-")
+      expect(subject.read(2)).to eq("+")
     end
     it "raises an exception if index too small" do
-      expect{ subject.instruction(-1) }.to raise_exception(ArgumentError)
+      expect{ subject.read(-1) }.to raise_exception(ArgumentError)
     end
     it "raises an exception if index too big" do
-      expect{ subject.instruction(instructions.length + 1) }.to raise_exception(ArgumentError)
+      expect{ subject.read(instructions.length + 1) }.to raise_exception(ArgumentError)
     end
   end
 

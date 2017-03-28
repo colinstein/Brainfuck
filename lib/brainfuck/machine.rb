@@ -43,7 +43,7 @@ module Brainfuck
     end
 
     def fetch
-      program.instruction(instruction_pointer)
+      program.read(instruction_pointer)
     end
 
     def increment_instruction_pointer
