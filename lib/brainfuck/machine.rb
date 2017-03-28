@@ -2,6 +2,8 @@ module Brainfuck
 
   class Machine
 
+    FORWARD = 1
+    BACKWARD = -FORWARD
     INSTRUCTION_MAPPING = {
       ?> => :increment_data_pointer,
       ?< => :decrement_data_pointer,
@@ -64,8 +66,6 @@ module Brainfuck
       send(instruction)
     end
 
-    def noop; end
-
     def increment_data_pointer
       value = @data_pointer + 1
       value = 0 unless (0...memory.size).include?(value)
@@ -101,25 +101,21 @@ module Brainfuck
 
     def jump_forward_on_zero_at_data_pointer
       return unless memory.read(data_pointer).zero?
-      jump_forward_markers_seen = 1
-      until jump_forward_markers_seen.zero? do
-        increment_instruction_pointer
-        case fetch
-          when ?[; jump_forward_markers_seen += 1
-          when ?]; jump_forward_markers_seen -= 1
-        end
-      end
+      @instruction_pointer += calculate_jump_distance(FORWARD)
     end
 
     def jump_backward_on_non_zero_at_data_pointer
       return if memory.read(data_pointer).zero?
-      jump_backward_markers_seen = 1
-      until jump_backward_markers_seen.zero? do
-        decrement_instruction_pointer
-        case fetch
-          when ?[; jump_backward_markers_seen -= 1
-          when ?]; jump_backward_markers_seen += 1
-        end
+      @instruction_pointer += calculate_jump_distance(BACKWARD)
+    end
+
+    def calculate_jump_distance(direction)
+      distance, jumps = 0, 0
+      loop do
+        instruction = program.read(@instruction_pointer + distance)
+        jumps += { ?[ => direction, ?] => -direction }.fetch(instruction, 0)
+        return distance if jumps.zero?
+        distance += direction
       end
     end
 
