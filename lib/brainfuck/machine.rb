@@ -67,44 +67,31 @@ module Brainfuck
     def noop; end
 
     def increment_data_pointer
-      if (0...memory.size).include?(data_pointer + 1)
-        @data_pointer += 1
-      else
-        @data_pointer = 0
-      end
+      value = @data_pointer + 1
+      value = 0 unless (0...memory.size).include?(value)
+      @data_pointer = value
     end
 
     def decrement_data_pointer
-      if (0...data_pointer).include?(data_pointer - 1)
-        @data_pointer -= 1
-      else
-        @data_pointer = (memory.size - 1)
-      end
+      value = @data_pointer - 1
+      value = (memory.size - 1) unless (0...data_pointer).include?(value)
+      @data_pointer = value
     end
 
     def increment_data_at_data_pointer
-      if (memory.minimum_value...memory.maximum_value).include?(memory.read(data_pointer))
-        new_value = memory.read(data_pointer) + 1
-        memory.write(data_pointer,new_value)
-      else
-        memory.write(data_pointer, memory.minimum_value)
-      end
+      value = memory.read(data_pointer) + 1
+      value = memory.minimum_value unless (memory.minimum_value..memory.maximum_value).include?(value)
+      memory.write(data_pointer, value)
     end
 
     def decrement_data_at_data_pointer
-      if (memory.minimum_value.next...memory.maximum_value).include?(memory.read(data_pointer))
-        new_value = memory.read(data_pointer) - 1
-        memory.write(data_pointer, new_value)
-      else
-        memory.write(data_pointer, memory.maximum_value)
-      end
+      value = memory.read(data_pointer) - 1
+      value = memory.maximum_value unless (memory.minimum_value..memory.maximum_value).include?(value)
+      memory.write(data_pointer, value)
     end
 
     def read_byte_from_stdin_to_data_pointer_cell
-      value = nil
-      until (memory.minimum_value..memory.maximum_value).include?(value)
-        value = @input.read
-      end
+      value = @input.read until (memory.minimum_value..memory.maximum_value).include?(value)
       memory.write(data_pointer, value)
     end
 
