@@ -1,14 +1,15 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
 require 'brainfuck/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "brainfuck"
   spec.version       = Brainfuck::VERSION
-  spec.date          = "2017-03-13"
+  spec.date          = "2017-03-29"
   spec.authors       = ["Colin Stein"]
-  spec.email         = ["colinstein@me.com"]
+  spec.email         = ["colinstein@mac.com"]
   spec.homepage      = "https://github.com/colinstein/brainfuck"
   spec.license       = "MIT"
 
@@ -20,7 +21,6 @@ Gem::Specification.new do |spec|
                        http://www.muppetlabs.com/~breadbox/bf/.
                        DESCRIPTION
 
-
   if spec.respond_to?(:metadata)
     spec.metadata['allowed_push_host'] = "https://gems.colins.me/"
   else
@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
       "public gem pushes."
   end
 
-  spec.files         = `git ls-files -z`.split("\x0").reject do |f|
+  spec.files = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
   end
 

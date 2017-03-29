@@ -51,8 +51,8 @@ describe Brainfuck::Machine do
           expect(subject.send(:decode, ?-)).to eq(:decrement_data_at_data_pointer)
           expect(subject.send(:decode, ?[)).to eq(:jump_forward_on_zero_at_data_pointer)
           expect(subject.send(:decode, ?])).to eq(:jump_backward_on_non_zero_at_data_pointer)
-          expect(subject.send(:decode, ?,)).to eq(:read_byte_from_stdin_to_data_pointer_cell)
-          expect(subject.send(:decode, ?.)).to eq(:write_byte_from_data_pointer_cell_to_stdout)
+          expect(subject.send(:decode, ?,)).to eq(:read_byte_from_input_to_data_pointer_cell)
+          expect(subject.send(:decode, ?.)).to eq(:write_byte_from_data_pointer_cell_to_output)
         end
       end
       context "with invalid instructions" do
@@ -163,8 +163,8 @@ describe Brainfuck::Machine do
         end
       end
 
-      describe "#write_byte_from_data_pointer_cell_to_stdout '.'" do
-        subject { machine.send(:dispatch, :write_byte_from_data_pointer_cell_to_stdout) }
+      describe "#write_byte_from_data_pointer_cell_to_output '.'" do
+        subject { machine.send(:dispatch, :write_byte_from_data_pointer_cell_to_output) }
         it "writes a byte" do
           allow(memory).to receive(:read).with(0).and_return(120)
           expect(output).to receive(:write).with(120).and_return(1)
@@ -172,8 +172,8 @@ describe Brainfuck::Machine do
         end
       end
 
-      describe "#read_byte_from_stdin_to_data_pointer_cell ','" do
-        subject { machine.send(:dispatch, :read_byte_from_stdin_to_data_pointer_cell) }
+      describe "#read_byte_from_input_to_data_pointer_cell ','" do
+        subject { machine.send(:dispatch, :read_byte_from_input_to_data_pointer_cell) }
         it "read a byte" do
           machine.instance_variable_set(:@data_pointer, 0)
           allow(memory).to receive(:minimum_value).and_return(0)
