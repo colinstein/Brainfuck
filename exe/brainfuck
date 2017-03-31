@@ -1,6 +1,16 @@
 #!/usr/bin/env ruby -w
-require "brainfuck"
 
+# This is the command-line Brainfuck interpreter. You can use it to execute a
+# program by passing a string of Brainfuck source or the name of a file
+# containing the source of a Brainfuck program.
+#
+# Standard Input and Standard Output are passed to the Brainfuck program so you
+# can use normal UNIX redirection to read input from a file or write to a pipe-
+# line.
+#
+# You can execute this program by running "bundle exec exe/brainfuck" from the
+# source directory.
+require "brainfuck"
 require "optparse"
 
 options = {}
@@ -9,7 +19,7 @@ option_parser = OptionParser.new do |o|
   o.banner = "Usage: #{File.basename(__FILE__)} [options] file"
   o.on("-v", "--version", "Display version information") { puts Brainfuck::VERSION; exit }
   o.on("-h", "--help", "Display this message") { puts o; exit }
-  o.on("-s", "--source=SOURCE", String, "Brain fuck source code") { |s| options[:source] = s }
+  o.on("-s", "--source=SOURCE", String, "Brainfuck source code") { |s| options[:source] = s }
 end
 option_parser.parse!
 
